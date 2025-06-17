@@ -1,0 +1,31 @@
+---
+
+- hosts: all
+  become: true
+  tasks: 
+
+  - name: install apache2 package
+    dnf:
+      name: httpd
+      state: present
+      update_cache: yes
+
+
+  - name: "Démarrer et activer le service Apache"
+    systemd:
+      name: httpd
+      state: started
+      enabled: yes
+
+  - name: "Ouvrir le port HTTP dans le firewall"
+    firewalld:
+      service: http
+      permanent: yes
+      state: enabled
+      immediate: yes
+  - name: "add php support for apache"
+    dnf:
+      name: php
+      state: latest
+
+
