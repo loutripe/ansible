@@ -1,0 +1,47 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+
+   - name: install updates (Ubuntu)
+     tags: always
+     apt:
+       upgrade: dist
+       update_cache: yes
+     when: ansible_distribution == "Ubuntu"
+   - name: install updates (Centos)
+     tags: always
+     dnf:
+       update_only: yes
+       update_cache: yes
+     when: ansible_distribution == "CentOS"
+
+- hosts: group1
+  become: true
+  tasks:
+
+
+   - name: install apache and php for Ubuntu servers
+     tags: grp
+     apt:
+       name:
+         - apache2
+         - libapache2-mod-php
+       state: latest
+     when: ansible_distribution == "Ubuntu"
+   - name: install apache and php for CentOS servers
+     tags: grp
+     dnf:
+       name:
+         - httpd
+         - php
+       state: latest
+     when: ansible_distribution == "CentOS"
+   - name: Copy fichier html depuis le controller vers webservers
+     tags: grp
+     copy:
+       src: default_install_apache_targetinghost.html 
+       dest: /var/www/html/index.html
+       owner: root
+       group: root
+       mode: 0644
