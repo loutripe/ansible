@@ -1,3 +1,5 @@
-192.168.56.12
-192.168.56.13
+192.168.56.12 package_apache=httpd package_php=php
+192.168.56.13 package_apache=httpd package_php=php
+192.168.56.106 package_apache=apache2 package_php=libapache2-mod-php
+
 
