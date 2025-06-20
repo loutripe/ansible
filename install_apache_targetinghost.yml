@@ -37,6 +37,33 @@
          - php
        state: latest
      when: ansible_distribution == "CentOS"
+
+   - name: start httpd
+     tags: grp,httpd
+     service:
+       name: httpd
+       state: started
+       enabled: yes
+     when: ansible_distribution == "CentOS"
+
+
+   - name: change e-mail address for admin
+     tags: grp,httpd
+     lineinfile: 
+       path: /etc/httpd/conf/httpd.conf
+       regexp: '^ServerAdminb'
+       line: ServerAdmin somebody@somewhere.net
+     when: ansible_distribution == "CentOS"
+     register: httpd
+
+
+   - name: restart httpd (Centos)
+     tags: grp,httpd
+     service:
+       name: httpd
+       state: restarted
+     when: httpd.changed
+
    - name: Copy fichier html depuis le controller vers webservers
      tags: grp
      copy:
