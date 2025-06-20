@@ -3,17 +3,20 @@
   become: true
   pre_tasks:
 
-   - name: install updates (Ubuntu)
+   - name: update repo chache (Ubuntu)
      tags: always
      apt:
-       upgrade: dist
        update_cache: yes
+     changed_when: false
      when: ansible_distribution == "Ubuntu"
-   - name: install updates (Centos)
+
+
+
+   - name: update repo chache (Centos)
      tags: always
      dnf:
-       update_only: yes
        update_cache: yes
+     changed_when: false
      when: ansible_distribution == "CentOS"
 
 - hosts: group1
@@ -72,6 +75,20 @@
        owner: root
        group: root
        mode: 0644
+
+
+
+
+- hosts: all
+  become: true
+  tasks:
+
+
+  - name: add ssh key for ali
+    tags: always
+    authorized_key:
+      user: ali
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBm6+m0WvdN3s+Cy95TwsrjmKO2JXwFa8TeU0jYOwGN8 ansible-lab-key"
 
 
 - hosts: workstations
